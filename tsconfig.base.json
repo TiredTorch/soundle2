@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@sndl-api": ["libs/soundle-api-lib/src/index.ts"],
+      "@sndl-client": ["libs/soundle-client-lib/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

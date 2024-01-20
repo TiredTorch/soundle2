@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  Song      Song[]
+}
+
+model Chatroom {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  Message   Message[]
+  User      User[]
+}
+
+model Message {
+  id                            Int      @id @default(autoincrement())
+  createdAt                     DateTime @default(now())
+  content                       String
+  senderId                      Int
+  receiverId                    Int
+  chatroomId                    Int
+  Chatroom                      Chatroom @relation(fields: [chatroomId], references: [id])
+  User_Message_receiverIdToUser User     @relation("Message_receiverIdToUser", fields: [receiverId], references: [id])
+  User_Message_senderIdToUser   User     @relation("Message_senderIdToUser", fields: [senderId], references: [id])
+}
+
+model Post {
+  id                       Int      @id @default(autoincrement())
+  createdAt                DateTime @default(now())
+  content                  String
+  authorId                 Int
+  User_Post_authorIdToUser User     @relation("Post_authorIdToUser", fields: [authorId], references: [id])
+  User_SavedPosts          User[]   @relation("SavedPosts")
+}
+
+model Song {
+  id                       Int      @id @default(autoincrement())
+  createdAt                DateTime @default(now())
+  sourse                   String
+  image                    String
+  authorId                 Int
+  albumId                  Int
+  Album                    Album    @relation(fields: [albumId], references: [id])
+  User_Song_authorIdToUser User     @relation("Song_authorIdToUser", fields: [authorId], references: [id])
+  User_SavedSongs          User[]   @relation("SavedSongs")
+}
+
+model User {
+  id                               Int       @id @default(autoincrement())
+  createdAt                        DateTime  @default(now())
+  status                           String
+  avatar                           String?
+  name                             String
+  email                            String    @unique
+  hash                             String
+  chatroomId                       Int
+  Message_Message_receiverIdToUser Message[] @relation("Message_receiverIdToUser")
+  Message_Message_senderIdToUser   Message[] @relation("Message_senderIdToUser")
+  Post_Post_authorIdToUser         Post[]    @relation("Post_authorIdToUser")
+  Song_Song_authorIdToUser         Song[]    @relation("Song_authorIdToUser")
+  Chatroom                         Chatroom  @relation(fields: [chatroomId], references: [id])
+  Post_SavedPosts                  Post[]    @relation("SavedPosts")
+  Song_SavedSongs                  Song[]    @relation("SavedSongs")
+}

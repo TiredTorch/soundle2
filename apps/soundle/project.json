@@ -24,7 +24,8 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "soundle:build"
+        "buildTarget": "soundle:build",
+        "proxyConfig": "apps/soundle/proxy.conf.json"
       },
       "configurations": {
         "development": {
