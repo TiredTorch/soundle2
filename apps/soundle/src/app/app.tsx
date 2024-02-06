@@ -1,12 +1,26 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
+import { useEffect, useState } from 'react';
 
-import NxWelcome from './nx-welcome';
 
-export function App() {
+export const App = () => {
+  const [data, setData] = useState(null) //state
+
+  const fetchDataMethod = async () => {
+    const fetchedData = await fetch("https://jsonplaceholder.typicode.com/todos") // data loading
+
+    const fetchedDataJson = await fetchedData.json() //transforming to json
+
+    setData(fetchedDataJson) // setting data for state
+  }
+
+  useEffect(() => { // calling method when page rendered
+    fetchDataMethod()
+  }, [])
+  
+  console.log("data", data)
+
   return (
     <div>
-      <NxWelcome title="soundle" />
+      a
     </div>
   );
 }
